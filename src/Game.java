@@ -43,7 +43,8 @@ public class Game {
                 while (computer.isShotResult()) {
                     if (player.getShips().size() != 0) {
                         System.out.println(computer.getName() + " your turn");
-                        computer.attack(player, computer.chooseCoordinate());
+                        computer.attack(player);
+                        player.getEnemyFild().showFild();
                     } else {
                         break;
                     }

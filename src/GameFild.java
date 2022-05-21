@@ -1,11 +1,11 @@
 public class GameFild {
     private Player player;
     private String[][] field;
-    private String cellSymbol = "⬜" + " ";
-    private String shipSymbol = "\uD83D\uDEE5" + " ";
-    private String oreolSymbol = "\uD83D\uDFE6";
-    private String hitSymbol = "\uD83D\uDFE5";
-    private String missSymbol = "❌";
+    public static String cellSymbol = "⬜" + " ";
+    public static String shipSymbol = "\uD83D\uDEE5" + " ";
+    public static String oreolSymbol = "\uD83D\uDFE6";
+    public static String hitSymbol = "\uD83D\uDFE5";
+    public static String missSymbol = "❌";
 
 
     public GameFild(Player player) {
@@ -16,23 +16,6 @@ public class GameFild {
                 field[i][j] = cellSymbol;
             }
         }
-    }
-
-    public String getShipSymbol() {
-        return shipSymbol;
-    }
-
-    public String getMissSymbol() {
-        return missSymbol;
-    }
-
-
-    public String getOreolSymbol() {
-        return oreolSymbol;
-    }
-
-    public String getHitSymbol() {
-        return hitSymbol;
     }
 
     public String[][] getField() {
@@ -106,7 +89,7 @@ public class GameFild {
     public boolean isShipAdded(Ship ship) {
         for (Coordinate coordinate : ship.getCoordinates()) {
             if (isCellEmpty(coordinate.getX(), coordinate.getY())) {
-                field[coordinate.getX()][coordinate.getY()] = getShipSymbol();
+                field[coordinate.getX()][coordinate.getY()] = shipSymbol;
             } else {
                 return false;
             }

@@ -16,6 +16,10 @@ public class Ship {
         return typeOfShip;
     }
 
+    public void setTypeOfShip(String typeOfShip) {
+        this.typeOfShip = typeOfShip;
+    }
+
     public boolean isShipValid() {
 
         boolean result = false;

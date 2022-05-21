@@ -41,33 +41,41 @@ public abstract class Player {
     public void attack(Player player, Coordinate coordinate) {
         try {
             if (isShotMissed(player, coordinate)) {
-                System.out.println("Miss");
-                shotResult = false;
-                player.enemyFild.drawMissMark(coordinate);
+                missedShot(player, coordinate);
             } else {
-                for (Ship ship : player.ships) {
-                    if (ship.getCoordinates().contains(coordinate)) {
-                        ship.getCoordinates().remove(coordinate);
-                        if (ship.isShipAlive(ship)) {
-                            System.out.println("Hit");
-                        } else {
-                            System.out.println("Sunk");
-                            player.ships.remove(ship);
-                        }
-                        shotResult = true;
-                        break;
-                    }
-                }
-                player.enemyFild.drawHitMark(coordinate);
+                successfulShot(player, coordinate);
             }
         } catch (ArrayIndexOutOfBoundsException ex) {
             System.out.println("Incorrect coordinates");
         }
     }
 
-    private boolean isShotMissed(Player player, Coordinate coordinate) {
+    public boolean isShotMissed(Player player, Coordinate coordinate) {
         return player.ownFild.isCellEmpty(coordinate.getX(), coordinate.getY()) ||
-                player.ownFild.getField()[coordinate.getX()][coordinate.getY()].equals(player.ownFild.getOreolSymbol());
+                player.ownFild.getField()[coordinate.getX()][coordinate.getY()].equals(GameFild.oreolSymbol);
+    }
+
+    private void missedShot(Player player, Coordinate coordinate){
+        System.out.println("Miss");
+        shotResult = false;
+        player.enemyFild.drawMissMark(coordinate);
+    }
+
+    private void successfulShot(Player player, Coordinate coordinate){
+        for (Ship ship : player.ships) {
+            if (ship.getCoordinates().contains(coordinate)) {
+                ship.getCoordinates().remove(coordinate);
+                if (ship.isShipAlive(ship)) {
+                    System.out.println("Hit");
+                } else {
+                    System.out.println("Sunk");
+                    player.ships.remove(ship);
+                }
+                shotResult = true;
+                break;
+            }
+        }
+        player.enemyFild.drawHitMark(coordinate);
     }
 }
 
