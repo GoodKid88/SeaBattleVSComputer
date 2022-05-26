@@ -59,5 +59,34 @@ public class Human extends Player {
             }
         }
     }
+
+    public void attack(Computer computer, Coordinate coordinate) {
+        try {
+            if (isShotMissed(computer, coordinate)) {
+                missedShot(computer, coordinate);
+            } else {
+                successfulShot(computer, coordinate);
+            }
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            System.out.println("Incorrect coordinates");
+        }
+    }
+
+    private void successfulShot(Computer computer, Coordinate coordinate){
+        for (Ship ship : computer.ships) {
+            if (ship.getCoordinates().contains(coordinate)) {
+                ship.getCoordinates().remove(coordinate);
+                if (ship.isShipAlive(ship)) {
+                    System.out.println("Hit");
+                } else {
+                    System.out.println("Sunk");
+                    computer.ships.remove(ship);
+                }
+                shotResult = true;
+                break;
+            }
+        }
+        this.enemyFild.drawHitMark(coordinate);
+    }
 }
 

@@ -35,47 +35,17 @@ public abstract class Player {
         return ships;
     }
 
-    public void addAllShips() {
-    }
-
-    public void attack(Player player, Coordinate coordinate) {
-        try {
-            if (isShotMissed(player, coordinate)) {
-                missedShot(player, coordinate);
-            } else {
-                successfulShot(player, coordinate);
-            }
-        } catch (ArrayIndexOutOfBoundsException ex) {
-            System.out.println("Incorrect coordinates");
-        }
-    }
-
     public boolean isShotMissed(Player player, Coordinate coordinate) {
         return player.ownFild.isCellEmpty(coordinate.getX(), coordinate.getY()) ||
-                player.ownFild.getField()[coordinate.getX()][coordinate.getY()].equals(GameFild.oreolSymbol);
+                player.ownFild.getField()[coordinate.getX()][coordinate.getY()].equals(GameFild.aureoleSymbol);
     }
 
-    private void missedShot(Player player, Coordinate coordinate){
+    public void missedShot(Player player, Coordinate coordinate){
         System.out.println("Miss");
         shotResult = false;
-        player.enemyFild.drawMissMark(coordinate);
+        this.enemyFild.drawMissMark(coordinate);
     }
 
-    private void successfulShot(Player player, Coordinate coordinate){
-        for (Ship ship : player.ships) {
-            if (ship.getCoordinates().contains(coordinate)) {
-                ship.getCoordinates().remove(coordinate);
-                if (ship.isShipAlive(ship)) {
-                    System.out.println("Hit");
-                } else {
-                    System.out.println("Sunk");
-                    player.ships.remove(ship);
-                }
-                shotResult = true;
-                break;
-            }
-        }
-        player.enemyFild.drawHitMark(coordinate);
-    }
+
 }
 

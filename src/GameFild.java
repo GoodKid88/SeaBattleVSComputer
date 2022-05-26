@@ -3,7 +3,7 @@ public class GameFild {
     private String[][] field;
     public static String cellSymbol = "⬜" + " ";
     public static String shipSymbol = "\uD83D\uDEE5" + " ";
-    public static String oreolSymbol = "\uD83D\uDFE6";
+    public static String aureoleSymbol = "\uD83D\uDFE6";
     public static String hitSymbol = "\uD83D\uDFE5";
     public static String missSymbol = "❌";
 
@@ -36,38 +36,38 @@ public class GameFild {
         int n = 0;
         if (ship.getTypeOfShip().equals("horizontal")) {
             if (ship.getCoordinates().get(0).getY() > 0) {
-                field[ship.getCoordinates().get(0).getX()][ship.getCoordinates().get(0).getY() - 1] = oreolSymbol;
+                field[ship.getCoordinates().get(0).getX()][ship.getCoordinates().get(0).getY() - 1] = aureoleSymbol;
                 n = -1;
             }
             if (ship.getCoordinates().get(j - 1).getY() < 9) {
-                field[ship.getCoordinates().get(0).getX()][ship.getCoordinates().get(j - 1).getY() + 1] = oreolSymbol;
+                field[ship.getCoordinates().get(0).getX()][ship.getCoordinates().get(j - 1).getY() + 1] = aureoleSymbol;
                 j += 1;
             }
 
             for (int i = n; i < j; i++) {
                 if (ship.getCoordinates().get(0).getX() > 0) {
-                    field[ship.getCoordinates().get(0).getX() - 1][ship.getCoordinates().get(0).getY() + i] = oreolSymbol;
+                    field[ship.getCoordinates().get(0).getX() - 1][ship.getCoordinates().get(0).getY() + i] = aureoleSymbol;
                 }
                 if (ship.getCoordinates().get(0).getX() < 9) {
-                    field[ship.getCoordinates().get(0).getX() + 1][ship.getCoordinates().get(0).getY() + i] = oreolSymbol;
+                    field[ship.getCoordinates().get(0).getX() + 1][ship.getCoordinates().get(0).getY() + i] = aureoleSymbol;
                 }
             }
         } else if (ship.getTypeOfShip().equals("vertical")) {
             if (ship.getCoordinates().get(0).getX() > 0) {
-                field[ship.getCoordinates().get(0).getX() - 1][ship.getCoordinates().get(0).getY()] = oreolSymbol;
+                field[ship.getCoordinates().get(0).getX() - 1][ship.getCoordinates().get(0).getY()] = aureoleSymbol;
                 n = -1;
             }
             if (ship.getCoordinates().get(j - 1).getX() < 9) {
-                field[ship.getCoordinates().get(j - 1).getX() + 1][ship.getCoordinates().get(0).getY()] = oreolSymbol;
+                field[ship.getCoordinates().get(j - 1).getX() + 1][ship.getCoordinates().get(0).getY()] = aureoleSymbol;
                 j += 1;
             }
 
             for (int i = n; i < j; i++) {
                 if (ship.getCoordinates().get(0).getY() > 1) {
-                    field[ship.getCoordinates().get(0).getX() + i][ship.getCoordinates().get(0).getY() - 1] = oreolSymbol;
+                    field[ship.getCoordinates().get(0).getX() + i][ship.getCoordinates().get(0).getY() - 1] = aureoleSymbol;
                 }
                 if (ship.getCoordinates().get(0).getY() < 9) {
-                    field[ship.getCoordinates().get(0).getX() + i][ship.getCoordinates().get(0).getY() + 1] = oreolSymbol;
+                    field[ship.getCoordinates().get(0).getX() + i][ship.getCoordinates().get(0).getY() + 1] = aureoleSymbol;
                 }
 
             }
