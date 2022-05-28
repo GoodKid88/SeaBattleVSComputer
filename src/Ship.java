@@ -22,55 +22,76 @@ public class Ship {
 
     public boolean isShipValid() {
 
-        boolean result = false;
-        int counter = 1;
-
-        if(coordinates.size() == 1){
+        if (coordinates.size() == 1) {
             typeOfShip = "horizontal";
             return true;
         }
-        for (Coordinate coordinate : coordinates) {
-            if (counter == coordinates.size()) {
-                result = true;
-                break;
-            }
-            if (coordinate.getX() == coordinates.get(1).getX()) {
-                if (coordinate.getY() + 1 == coordinates.get(counter).getY()) {
-                    result = true;
-                    typeOfShip = "horizontal";
-                    counter++;
-                } else {
-                    result = false;
-                    break;
+
+        if (isShipVertical()) {
+            typeOfShip = "vertical";
+            for (int i = 1; i < coordinates.size(); i++) {
+                if (coordinates.get(0).x + i != coordinates.get(i).x) {
+                    return false;
                 }
-            } else {
-                result = false;
             }
-        }
-        for (Coordinate coordinate : coordinates) {
-            if (counter == coordinates.size()) {
-                result = true;
-                break;
-            }
-            if (coordinate.getY() == coordinates.get(1).getY()) {
-                if (coordinate.getX() + 1 == coordinates.get(counter).getX()) {
-                    result = true;
-                    typeOfShip = "vertical";
-                    counter++;
-                } else {
-                    result = false;
-                    break;
+        } else if (isShipHorizontal()) {
+            typeOfShip = "horizontal";
+            for (int i = 1; i < coordinates.size(); i++) {
+                if (coordinates.get(0).y+i != coordinates.get(i).y) {
+                    return false;
                 }
-            } else {
-                result = false;
             }
+        } else {
+            return false;
         }
-        return result;
+        return true;
+
     }
 
-    public boolean isShipAlive(Ship ship) {
-        return ship.getCoordinates().size() != 0;
+    public void defineTypeOfShip() {
+        if (isShipHorizontal()) {
+            typeOfShip = "horizontal";
+        }
+        if (isShipVertical()) {
+            typeOfShip = "vertical";
+        }
     }
+
+    private boolean isShipVertical() {
+        for (int i = 1; i < coordinates.size(); i++) {
+            if (coordinates.get(i).y != coordinates.get(0).y) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isShipHorizontal() {
+        for (int i = 1; i < coordinates.size(); i++) {
+            if (coordinates.get(i).x != coordinates.get(0).x) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isShipAlive() {
+        return coordinates.size() != 0;
+    }
+
+    public boolean isHitShip() {
+        return coordinates.size() > 0;
+    }
+
+    public boolean isShipCanBeDefined() {
+        return coordinates.size() >= 2;
+    }
+
+    public boolean isThisOneDeckShip() {
+        return coordinates.size() == 1;
+    }
+
+
 }
 
 

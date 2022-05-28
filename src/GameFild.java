@@ -5,7 +5,7 @@ public class GameFild {
     public static String shipSymbol = "\uD83D\uDEE5" + " ";
     public static String aureoleSymbol = "\uD83D\uDFE6";
     public static String hitSymbol = "\uD83D\uDFE5";
-    public static String missSymbol = "❌";
+    public static String missSymbol = "❌" + " ";
 
 
     public GameFild(Player player) {
@@ -32,64 +32,31 @@ public class GameFild {
     }
 
     public void addAureole(Ship ship) {
-        int j = ship.getCoordinates().size();
-        int n = 0;
-        if (ship.getTypeOfShip().equals("horizontal")) {
-            if (ship.getCoordinates().get(0).getY() > 0) {
-                field[ship.getCoordinates().get(0).getX()][ship.getCoordinates().get(0).getY() - 1] = aureoleSymbol;
-                n = -1;
-            }
-            if (ship.getCoordinates().get(j - 1).getY() < 9) {
-                field[ship.getCoordinates().get(0).getX()][ship.getCoordinates().get(j - 1).getY() + 1] = aureoleSymbol;
-                j += 1;
-            }
-
-            for (int i = n; i < j; i++) {
-                if (ship.getCoordinates().get(0).getX() > 0) {
-                    field[ship.getCoordinates().get(0).getX() - 1][ship.getCoordinates().get(0).getY() + i] = aureoleSymbol;
+        for (Coordinate coordinate : ship.getCoordinates()) {
+            for (Coordinate around : Ranges.getCoordinatesAround(coordinate)) {
+                if (isCellEmpty(around)) {
+                    field[around.x][around.y] = aureoleSymbol;
                 }
-                if (ship.getCoordinates().get(0).getX() < 9) {
-                    field[ship.getCoordinates().get(0).getX() + 1][ship.getCoordinates().get(0).getY() + i] = aureoleSymbol;
-                }
-            }
-        } else if (ship.getTypeOfShip().equals("vertical")) {
-            if (ship.getCoordinates().get(0).getX() > 0) {
-                field[ship.getCoordinates().get(0).getX() - 1][ship.getCoordinates().get(0).getY()] = aureoleSymbol;
-                n = -1;
-            }
-            if (ship.getCoordinates().get(j - 1).getX() < 9) {
-                field[ship.getCoordinates().get(j - 1).getX() + 1][ship.getCoordinates().get(0).getY()] = aureoleSymbol;
-                j += 1;
-            }
-
-            for (int i = n; i < j; i++) {
-                if (ship.getCoordinates().get(0).getY() > 1) {
-                    field[ship.getCoordinates().get(0).getX() + i][ship.getCoordinates().get(0).getY() - 1] = aureoleSymbol;
-                }
-                if (ship.getCoordinates().get(0).getY() < 9) {
-                    field[ship.getCoordinates().get(0).getX() + i][ship.getCoordinates().get(0).getY() + 1] = aureoleSymbol;
-                }
-
             }
         }
     }
 
     public void drawHitMark(Coordinate coordinate) {
-        field[coordinate.getX()][coordinate.getY()] = hitSymbol;
+        field[coordinate.x][coordinate.y] = hitSymbol;
     }
 
     public void drawMissMark(Coordinate coordinate) {
-        field[coordinate.getX()][coordinate.getY()] = missSymbol;
+        field[coordinate.x][coordinate.y] = missSymbol;
     }
 
-    public boolean isCellEmpty(int a, int b) {
-        return field[a][b].equals(cellSymbol);
+    public boolean isCellEmpty(Coordinate coordinate) {
+        return field[coordinate.x][coordinate.y].equals(cellSymbol);
     }
 
-    public boolean isShipAdded(Ship ship) {
+    public boolean isShipCanBeAdded(Ship ship) {
         for (Coordinate coordinate : ship.getCoordinates()) {
-            if (isCellEmpty(coordinate.getX(), coordinate.getY())) {
-                field[coordinate.getX()][coordinate.getY()] = shipSymbol;
+            if (isCellEmpty(coordinate)) {
+                field[coordinate.x][coordinate.y] = shipSymbol;
             } else {
                 return false;
             }

@@ -36,8 +36,8 @@ public abstract class Player {
     }
 
     public boolean isShotMissed(Player player, Coordinate coordinate) {
-        return player.ownFild.isCellEmpty(coordinate.getX(), coordinate.getY()) ||
-                player.ownFild.getField()[coordinate.getX()][coordinate.getY()].equals(GameFild.aureoleSymbol);
+        return player.ownFild.isCellEmpty(coordinate) ||
+                player.ownFild.getField()[coordinate.x][coordinate.y].equals(GameFild.aureoleSymbol);
     }
 
     public void missedShot(Player player, Coordinate coordinate){
