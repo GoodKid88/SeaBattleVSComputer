@@ -24,30 +24,35 @@ public class Game {
 
         System.out.println("The ships have been placed! The battle begins!");
 
-        while (isHumanWin() || isComputerWin()) {
+        while (!isWinner()) {
             try {
                 while (human.isShotResult()) {
-                    if (isHumanWin()) {
+                    if (!isHumanWin()) {
                         System.out.println(human.getName() + " your turn");
                         human.attack(computer, new Coordinate(scanner.nextInt(), scanner.nextInt()));
+                        human.getEnemyFild().showFild();
                     } else {
                         break;
                     }
                 }
-                human.getEnemyFild().showFild();
-                checkWhoWin();
+                if(isWinner()){
+                    checkWhoWin();
+                    break;
+                }
 
                 while (computer.isShotResult()) {
-                    if (isComputerWin()) {
+                    if (!isComputerWin()) {
                         System.out.println(computer.getName() + " your turn");
                         computer.attack(human);
+                        computer.getEnemyFild().showFild();
                     } else {
                         break;
                     }
                 }
-                computer.getEnemyFild().showFild();
-
-                checkWhoWin();
+                if(isWinner()){
+                    checkWhoWin();
+                    break;
+                }
                 resetShotResult();
 
             } catch (InputMismatchException ex) {
@@ -57,23 +62,27 @@ public class Game {
     }
 
     private boolean isHumanWin() {
-        return human.getShips().size() != 0;
+        return computer.getShips().size() == 0;
     }
 
     private boolean isComputerWin() {
-        return computer.getShips().size() != 0;
+        return human.getShips().size() == 0;
+    }
+
+    private boolean isWinner(){
+        return isComputerWin() || isHumanWin();
     }
 
     private void checkWhoWin() {
-        if (computer.getShips().size() == 0) {
+        if (isHumanWin()) {
             System.out.println(human.getName() + " Won!");
         }
-        if (human.getShips().size() == 0) {
+        if (isComputerWin()) {
             System.out.println(computer.getName() + " Won!");
         }
     }
 
-    private void resetShotResult(){
+    private void resetShotResult() {
         human.setShotResult();
         computer.setShotResult();
     }

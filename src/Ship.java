@@ -16,26 +16,15 @@ public class Ship {
         return typeOfShip;
     }
 
-    public void setTypeOfShip(String typeOfShip) {
-        this.typeOfShip = typeOfShip;
-    }
-
     public boolean isShipValid() {
 
-        if (coordinates.size() == 1) {
-            typeOfShip = "horizontal";
-            return true;
-        }
-
         if (isShipVertical()) {
-            typeOfShip = "vertical";
             for (int i = 1; i < coordinates.size(); i++) {
                 if (coordinates.get(0).x + i != coordinates.get(i).x) {
                     return false;
                 }
             }
         } else if (isShipHorizontal()) {
-            typeOfShip = "horizontal";
             for (int i = 1; i < coordinates.size(); i++) {
                 if (coordinates.get(0).y+i != coordinates.get(i).y) {
                     return false;
@@ -86,12 +75,6 @@ public class Ship {
     public boolean isShipCanBeDefined() {
         return coordinates.size() >= 2;
     }
-
-    public boolean isThisOneDeckShip() {
-        return coordinates.size() == 1;
-    }
-
-
 }
 
 

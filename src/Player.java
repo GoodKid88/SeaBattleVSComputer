@@ -6,6 +6,7 @@ public abstract class Player {
     GameFild enemyFild;
     boolean shotResult;
     List<Ship> ships;
+    Ship hitShip;
 
     public Player() {
         this.shotResult = true;
@@ -40,7 +41,7 @@ public abstract class Player {
                 player.ownFild.getField()[coordinate.x][coordinate.y].equals(GameFild.aureoleSymbol);
     }
 
-    public void missedShot(Player player, Coordinate coordinate){
+    public void missedShot(Coordinate coordinate){
         System.out.println("Miss");
         shotResult = false;
         this.enemyFild.drawMissMark(coordinate);

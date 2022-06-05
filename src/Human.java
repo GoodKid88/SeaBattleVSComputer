@@ -9,6 +9,7 @@ public class Human extends Player {
         this.ownFild = new GameFild(this);
         this.enemyFild = new GameFild(this);
         this.ships = new ArrayList<>();
+        hitShip = new Ship(new ArrayList<>());
     }
 
     public void addAllShips() {
@@ -45,8 +46,6 @@ public class Human extends Player {
                     if (this.getOwnFild().isShipCanBeAdded(ship)) {
                         this.getOwnFild().addAureole(ship);
                         this.ships.add(ship);
-                        this.ownFild.showFild();
-                        System.out.println();
                         counter++;
                     } else {
                         System.out.println("Cells are occupied!");
@@ -65,7 +64,7 @@ public class Human extends Player {
     public void attack(Computer computer, Coordinate coordinate) {
         try {
             if (isShotMissed(computer, coordinate)) {
-                missedShot(computer, coordinate);
+                missedShot(coordinate);
             } else {
                 successfulShot(computer, coordinate);
             }
@@ -74,16 +73,18 @@ public class Human extends Player {
         }
     }
 
-    private void successfulShot(Computer computer, Coordinate coordinate){
+    private void successfulShot(Computer computer, Coordinate coordinate) {
         for (Ship ship : computer.ships) {
             if (ship.getCoordinates().contains(coordinate)) {
                 ship.getCoordinates().remove(coordinate);
+                hitShip.getCoordinates().add(coordinate);
                 if (ship.isShipAlive()) {
                     System.out.println("Hit");
                 } else {
                     System.out.println("Sunk");
-                    this.enemyFild.addAureole(ship);
+                    this.enemyFild.addAureole(hitShip);
                     computer.ships.remove(ship);
+                    hitShip = new Ship(new ArrayList<>());
                 }
                 shotResult = true;
                 break;

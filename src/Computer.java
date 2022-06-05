@@ -1,12 +1,10 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Computer extends Player {
-    private Ship hitShip;
     private List<Coordinate> shotCollection;
+    private List<Coordinate> hitShipCoordinateToSort;
 
     public Computer() {
         this.name = "Computer";
@@ -15,6 +13,7 @@ public class Computer extends Player {
         this.ships = new ArrayList<>();
         this.shotCollection = new ArrayList<>();
         hitShip = new Ship(new ArrayList<>());
+        hitShipCoordinateToSort = hitShip.getCoordinates();
     }
 
     public void addAllShips() {
@@ -39,7 +38,6 @@ public class Computer extends Player {
 
             }
         }
-        this.ownFild.showFild();
     }
 
     public void attack(Human human) {
@@ -48,14 +46,13 @@ public class Computer extends Player {
             coordinate = chooseCoordinateToShot();
         } else {
             coordinate = chooseRandomCoordinate();
-            // coordinate = new Coordinate(1, 0);
         }
-        if (isShotDuplicated(coordinate)) {
+        if (isShotDuplicated(coordinate) || !this.enemyFild.isCellEmpty(coordinate)) {
             attack(human);
         } else {
             shotCollection.add(coordinate);
             if (isShotMissed(human, coordinate)) {
-                missedShot(human, coordinate);
+                missedShot(coordinate);
             } else {
                 successfulShot(human, coordinate);
             }
@@ -73,43 +70,42 @@ public class Computer extends Player {
                     System.out.println("Sunk");
                     this.enemyFild.addAureole(hitShip);
                     human.ships.remove(ship);
-                    if (hitShip.isThisOneDeckShip()) {
-                        hitShip.setTypeOfShip("vertical");
-                    }else{
-                        hitShip.defineTypeOfShip();
-                    }
-                    hitShip = new Ship(new ArrayList<>());
+                    hitShip.getCoordinates().clear();
                 }
                 shotResult = true;
                 break;
             }
         }
         this.enemyFild.drawHitMark(coordinate);
-        this.enemyFild.showFild();
+        //this.enemyFild.showFild();
     }
 
     private Coordinate verticalShipKillStrategy() {
-        int counter = hitShip.getCoordinates().size();
-        Coordinate variant1 = new Coordinate(hitShip.getCoordinates().get(0).x + counter, hitShip.getCoordinates().get(0).y);
-        Coordinate variant2 = new Coordinate(hitShip.getCoordinates().get(0).x - counter, hitShip.getCoordinates().get(0).y);
-        if (isVariantCanBeUsed(variant1)) {
+        int lastElement = hitShip.getCoordinates().size()-1;
+        Coordinate variant1 = new Coordinate(hitShip.getCoordinates().get(lastElement).x + 1, hitShip.getCoordinates().get(0).y);
+        Coordinate variant2 = new Coordinate(hitShip.getCoordinates().get(0).x - 1, hitShip.getCoordinates().get(0).y);
+        if (isCoordinateCanBeUsed(variant1)) {
             return variant1;
+        } else if (isCoordinateCanBeUsed(variant2)) {
+            return variant2;
         }
-        return variant2;
+        return horizontalShipKillStrategy();
     }
 
     private Coordinate horizontalShipKillStrategy() {
-        int counter = hitShip.getCoordinates().size();
-        Coordinate variant1 = new Coordinate(hitShip.getCoordinates().get(0).x, hitShip.getCoordinates().get(0).y + counter);
-        Coordinate variant2 = new Coordinate(hitShip.getCoordinates().get(0).x, hitShip.getCoordinates().get(0).y - counter);
+        int lastElement = hitShip.getCoordinates().size()-1;
+        Coordinate variant1 = new Coordinate(hitShip.getCoordinates().get(0).x, hitShip.getCoordinates().get(lastElement).y + 1);
+        Coordinate variant2 = new Coordinate(hitShip.getCoordinates().get(0).x, hitShip.getCoordinates().get(0).y - 1);
 
-        if (isVariantCanBeUsed(variant1)) {
+        if (isCoordinateCanBeUsed(variant1)) {
             return variant1;
+        } else if (isCoordinateCanBeUsed(variant2)) {
+            return variant2;
         }
-        return variant2;
+        return verticalShipKillStrategy();
     }
 
-    private Boolean isVariantCanBeUsed(Coordinate coordinate) {
+    private Boolean isCoordinateCanBeUsed(Coordinate coordinate) {
         if (Ranges.inRange(coordinate)) {
             if (this.enemyFild.isCellEmpty(coordinate)) {
                 return true;
@@ -132,6 +128,15 @@ public class Computer extends Player {
     private Coordinate chooseCoordinateToShot() {
         if (hitShip.isShipCanBeDefined()) {
             hitShip.defineTypeOfShip();
+            Collections.sort(hitShip.getCoordinates(), new Comparator<Coordinate>(){
+                @Override
+                public int compare(Coordinate o1, Coordinate o2){
+                    if(hitShip.getTypeOfShip() == "vertical"){
+                        return Integer.compare(o1.x, o2.x);
+                    }
+                    return Integer.compare(o1.y, o2.y);
+                }
+            });
             if (hitShip.getTypeOfShip().equals("vertical")) {
                 return verticalShipKillStrategy();
             } else {
@@ -149,6 +154,6 @@ public class Computer extends Player {
             return horizontalShipKillStrategy();
         }
     }
-}
 
+}
 
