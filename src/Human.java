@@ -46,6 +46,7 @@ public class Human extends Player {
                     if (this.getOwnFild().isShipCanBeAdded(ship)) {
                         this.getOwnFild().addAureole(ship);
                         this.ships.add(ship);
+                        this.ownFild.showFild();
                         counter++;
                     } else {
                         System.out.println("Cells are occupied!");

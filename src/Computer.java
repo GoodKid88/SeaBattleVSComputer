@@ -16,13 +16,28 @@ public class Computer extends Player {
         hitShipCoordinateToSort = hitShip.getCoordinates();
     }
 
+    private File choseCoordinateFile(){
+        File file1 = new File("res/coordinates1.txt");
+        File file2 = new File("res/coordinates2.txt");
+        File file3 = new File("res/coordinates3.txt");
+        File file4 = new File("res/coordinates4.txt");
+        int random = (int) (0 + Math.random() * 4);
+        if(random == 0){
+            return file1;
+        }else if(random ==1){
+            return file2;
+        }else if(random == 2){
+            return file3;
+        }
+        return file4;
+    }
+
     public void addAllShips() {
-        File file = new File("res/coordinates.txt");
         Scanner scanner = null;
         try {
-            scanner = new Scanner(file);
+            scanner = new Scanner(choseCoordinateFile());
         } catch (FileNotFoundException e) {
-            System.out.println("File coordinates.txt not found");
+            System.out.println("File not found");
         }
 
         while (scanner.hasNextLine()) {
