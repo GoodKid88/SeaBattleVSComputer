@@ -3,8 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Computer extends Player {
-    private List<Coordinate> shotCollection;
-    private List<Coordinate> hitShipCoordinateToSort;
+    private final List<Coordinate> shotCollection;
 
     public Computer() {
         this.name = "Computer";
@@ -12,8 +11,7 @@ public class Computer extends Player {
         this.enemyFild = new GameFild(this);
         this.ships = new ArrayList<>();
         this.shotCollection = new ArrayList<>();
-        hitShip = new Ship(new ArrayList<>());
-        hitShipCoordinateToSort = hitShip.getCoordinates();
+        this.hitShip = new Ship(new ArrayList<>());
     }
 
     private File choseCoordinateFile(){
@@ -40,7 +38,9 @@ public class Computer extends Player {
             System.out.println("File not found");
         }
 
-        while (scanner.hasNextLine()) {
+        while (true) {
+            assert scanner != null;
+            if (!scanner.hasNextLine()) break;
             String line = scanner.nextLine();
             String[] coordinates = line.split(("[.,:;()?!\"\\s–]+"));
 
@@ -92,7 +92,6 @@ public class Computer extends Player {
             }
         }
         this.enemyFild.drawHitMark(coordinate);
-        //this.enemyFild.showFild();
     }
 
     private Coordinate verticalShipKillStrategy() {
@@ -122,9 +121,7 @@ public class Computer extends Player {
 
     private Boolean isCoordinateCanBeUsed(Coordinate coordinate) {
         if (Ranges.inRange(coordinate)) {
-            if (this.enemyFild.isCellEmpty(coordinate)) {
-                return true;
-            }
+            return this.enemyFild.isCellEmpty(coordinate);
         }
         return false;
     }
@@ -136,21 +133,17 @@ public class Computer extends Player {
     public Coordinate chooseRandomCoordinate() {
         int random = (int) (0 + Math.random() * 10);
         int random1 = (int) (0 + Math.random() * 10);
-        Coordinate coordinate = new Coordinate(random, random1);
-        return coordinate;
+        return new Coordinate(random, random1);
     }
 
     private Coordinate chooseCoordinateToShot() {
         if (hitShip.isShipCanBeDefined()) {
             hitShip.defineTypeOfShip();
-            Collections.sort(hitShip.getCoordinates(), new Comparator<Coordinate>(){
-                @Override
-                public int compare(Coordinate o1, Coordinate o2){
-                    if(hitShip.getTypeOfShip() == "vertical"){
-                        return Integer.compare(o1.x, o2.x);
-                    }
-                    return Integer.compare(o1.y, o2.y);
+            Collections.sort(hitShip.getCoordinates(), (o1, o2) -> {
+                if(hitShip.getTypeOfShip().equals("vertical")){
+                    return Integer.compare(o1.x, o2.x);
                 }
+                return Integer.compare(o1.y, o2.y);
             });
             if (hitShip.getTypeOfShip().equals("vertical")) {
                 return verticalShipKillStrategy();
